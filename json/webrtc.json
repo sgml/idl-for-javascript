@@ -1,288 +1,168 @@
 {
- "AudioMediaStreamTrack": {
-  "type": "interface",
-  "inherits": [
-   "MediaStreamTrack"
-  ],
-  "readonly": {
-   "canInsertDTMF": "Boolean"
+  "AudioMediaStreamTrack": {
+    "inherits": [ "MediaStreamTrack" ],
+    "readonly": { "canInsertDTMF": "Boolean" },
+    "methods": {
+      "insertDTMF": { "args": { "tones": "String", "duration": "Int32" } } 
+    } 
   },
-  "methods": {
-   "insertDTMF": {
-    "args": {
-     "tones": "String",
-     "duration": "Int32"
-    }
-   }
-  }
- },
- "BlobCallback": {
-  "type": "interface",
-  "inherits": [],
-  "methods": {
-   "handleEvent": {
-    "args": {
-     "blob": "Blob"
-    }
-   }
+  "BlobCallback": {
+    "inherits": [],
+    "methods": { "handleEvent": { "args": { "blob": "Blob" } } },
+    "Callback": { "arguments": null },
+    "NoInterfaceObject": { "arguments": null } 
   },
-  "Callback": true,
-  "NoInterfaceObject": true
- },
- "LocalMediaStream": {
-  "type": "interface",
-  "inherits": [
-   "MediaStream"
-  ],
-  "methods": {
-   "stop": {}
-  }
- },
- "MediaStream": {
-  "type": "interface",
-  "inherits": [],
-  "readonly": {
-   "label": "String",
-   "audioTracks": "MediaStreamTrackList",
-   "videoTracks": "MediaStreamTrackList"
+  "LocalMediaStream": { "inherits": [ "MediaStream" ], "methods": { "stop": {} } },
+  "MediaStream": {
+    "inherits": [],
+    "readonly": {
+      "label": "String",
+      "audioTracks": "MediaStreamTrackList",
+      "videoTracks": "MediaStreamTrackList" 
+    },
+    "methods": {
+      "record": { "returns": "MediaStreamRecorder" },
+      "addEventListener": {
+        "args": {
+          "type": "String",
+          "callback": "EventListener",
+          "capture": "Boolean" 
+        } 
+      },
+      "removeEventListener": {
+        "args": {
+          "type": "String",
+          "callback": "EventListener",
+          "capture": "Boolean" 
+        } 
+      },
+      "dispatchEvent": { "returns": "Boolean", "args": { "event": "Event" } } 
+    },
+    "properties": { "ended": "Boolean", "onended": "Function" },
+    "construct": {
+      "args": {
+        "audioTracks": "MediaStreamTrackList",
+        "videoTracks": "MediaStreamTrackList" 
+      } 
+    } 
   },
-  "methods": {
-   "record": {
-    "returns": "MediaStreamRecorder"
-   },
-   "addEventListener": {
-    "args": {
-     "type": "String",
-     "callback": "EventListener",
-     "capture": "Boolean"
-    }
-   },
-   "removeEventListener": {
-    "args": {
-     "type": "String",
-     "callback": "EventListener",
-     "capture": "Boolean"
-    }
-   },
-   "dispatchEvent": {
-    "returns": "Boolean",
-    "args": {
-     "event": "Event"
-    }
-   }
+  "MediaStreamEvent": {
+    "inherits": [ "Event" ],
+    "readonly": { "stream": "MediaStream" },
+    "construct": {
+      "args": { "type": "String", "eventInitDict": "MediaStreamEventInit" } 
+    } 
   },
-  "properties": {
-   "ended": "Boolean",
-   "onended": "Function"
+  "MediaStreamEventInit": { "inherits": [ "EventInit" ], "defaults": {} },
+  "MediaStreamRecorder": {
+    "inherits": [],
+    "methods": {
+      "getRecordedData": { "returns": "voice", "args": { "callBack": "BlobCallback" } } 
+    } 
   },
-  "construct": {
-   "args": {
-    "audioTracks": "MediaStreamTrackList",
-    "videoTracks": "MediaStreamTrackList"
-   }
-  }
- },
- "MediaStreamEvent": {
-  "type": "interface",
-  "inherits": [
-   "Event"
-  ],
-  "readonly": {
-   "stream": "MediaStream"
+  "MediaStreamTrack": {
+    "inherits": [],
+    "readonly": { "kind": "String", "label": "String", "readyState": "Uint16" },
+    "properties": {
+      "enabled": "Boolean",
+      "onmute": "Function",
+      "onunmute": "Function",
+      "onended": "Function" 
+    },
+    "constants": { "MUTED": 1, "ENDED": 2 } 
   },
-  "construct": {
-   "args": {
-    "type": "String",
-    "eventInitDict": "MediaStreamEventInit"
-   }
-  }
- },
- "MediaStreamEventInit": {
-  "type": "dictionary",
-  "inherits": [
-   "EventInit"
-  ],
-  "defaults": {
-   "stream": ""
-  }
- },
- "MediaStreamRecorder": {
-  "type": "interface",
-  "inherits": [],
-  "methods": {
-   "getRecordedData": {
-    "returns": "voice",
-    "args": {
-     "callBack": "BlobCallback"
-    }
-   }
-  }
- },
- "MediaStreamTrack": {
-  "type": "interface",
-  "inherits": [],
-  "readonly": {
-   "kind": "String",
-   "label": "String",
-   "readyState": "Uint16"
+  "MediaStreamTrackEvent": {
+    "inherits": [ "Event" ],
+    "readonly": { "track": "MediaStreamTrack" },
+    "construct": {
+      "args": { "type": "String", "eventInitDict": "MediaStreamTrackEventInit" } 
+    } 
   },
-  "properties": {
-   "enabled": "Boolean",
-   "onmute": "Function",
-   "onunmute": "Function",
-   "onended": "Function"
+  "MediaStreamTrackEventInit": { "inherits": [ "EventInit" ], "defaults": {} },
+  "MediaStreamTrackList": {
+    "inherits": [],
+    "readonly": { "length": "Uint32" },
+    "methods": {
+      "item": { "returns": "MediaStreamTrack", "args": { "index": "Uint32" } },
+      "add": { "args": { "track": "MediaStreamTrack" } },
+      "remove": { "args": { "track": "MediaStreamTrack" } } 
+    },
+    "properties": { "onaddtrack": "Function", "onremovetrack": "Function" } 
   },
-  "constants": {
-   "LIVE": 0,
-   "MUTED": 1,
-   "ENDED": 2
-  }
- },
- "MediaStreamTrackEvent": {
-  "type": "interface",
-  "inherits": [
-   "Event"
-  ],
-  "readonly": {
-   "track": "MediaStreamTrack"
+  "PeerConnection": {
+    "inherits": [],
+    "methods": {
+      "processSignalingMessage": { "args": { "message": "String" } },
+      "addStream": {
+        "args": { "stream": "MediaStream", "hints": "MediaStreamHints" } 
+      },
+      "removeStream": { "args": { "stream": "MediaStream" } },
+      "close": {},
+      "addEventListener": {
+        "args": {
+          "type": "String",
+          "callback": "EventListener",
+          "capture": "Boolean" 
+        } 
+      },
+      "removeEventListener": {
+        "args": {
+          "type": "String",
+          "callback": "EventListener",
+          "capture": "Boolean" 
+        } 
+      },
+      "dispatchEvent": { "returns": "Boolean", "args": { "event": "Event" } } 
+    },
+    "constants": {
+      "NEGOTIATING": 1,
+      "ACTIVE": 2,
+      "CLOSING": 4,
+      "CLOSED": 3,
+      "ICE_GATHERING": 256,
+      "ICE_WAITING": 512,
+      "ICE_CHECKING": 768,
+      "ICE_CONNECTED": 1024,
+      "ICE_COMPLETED": 1280,
+      "ICE_FAILED": 1536,
+      "ICE_CLOSED": 1792,
+      "SDP_IDLE": 4096,
+      "SDP_WAITING": 8192,
+      "SDP_GLARE": 12288 
+    },
+    "readonly": {
+      "readyState": "Uint16",
+      "iceState": "Uint16",
+      "sdpState": "Uint16",
+      "localStreams": "MediaStream...",
+      "remoteStreams": "MediaStream..." 
+    },
+    "properties": {
+      "onconnecting": "Function",
+      "onopen": "Function",
+      "onstatechange": "Function",
+      "onaddstream": "Function",
+      "onremovestream": "Function" 
+    },
+    "construct": {
+      "args": {
+        "configuration": "String",
+        "signalingCallback": "SignalingCallback" 
+      } 
+    } 
   },
-  "construct": {
-   "args": {
-    "type": "String",
-    "eventInitDict": "MediaStreamTrackEventInit"
-   }
-  }
- },
- "MediaStreamTrackEventInit": {
-  "type": "dictionary",
-  "inherits": [
-   "EventInit"
-  ],
-  "defaults": {
-   "track": ""
-  }
- },
- "MediaStreamTrackList": {
-  "type": "interface",
-  "inherits": [],
-  "readonly": {
-   "length": "Uint32"
+  "SignalingCallback": {
+    "inherits": [],
+    "methods": {
+      "handleEvent": { "args": { "message": "String", "source": "PeerConnection" } } 
+    },
+    "Callback": { "arguments": null },
+    "NoInterfaceObject": { "arguments": null } 
   },
-  "methods": {
-   "item": {
-    "returns": "MediaStreamTrack",
-    "args": {
-     "index": "Uint32"
-    }
-   },
-   "add": {
-    "args": {
-     "track": "MediaStreamTrack"
-    }
-   },
-   "remove": {
-    "args": {
-     "track": "MediaStreamTrack"
-    }
-   }
-  },
-  "properties": {
-   "onaddtrack": "Function",
-   "onremovetrack": "Function"
-  }
- },
- "PeerConnection": {
-  "type": "interface",
-  "inherits": [],
-  "methods": {
-   "processSignalingMessage": {
-    "args": {
-     "message": "String"
-    }
-   },
-   "addStream": {
-    "args": {
-     "stream": "MediaStream",
-     "hints": "MediaStreamHints"
-    }
-   },
-   "removeStream": {
-    "args": {
-     "stream": "MediaStream"
-    }
-   },
-   "close": {},
-   "addEventListener": {
-    "args": {
-     "type": "String",
-     "callback": "EventListener",
-     "capture": "Boolean"
-    }
-   },
-   "removeEventListener": {
-    "args": {
-     "type": "String",
-     "callback": "EventListener",
-     "capture": "Boolean"
-    }
-   },
-   "dispatchEvent": {
-    "returns": "Boolean",
-    "args": {
-     "event": "Event"
-    }
-   }
-  },
-  "constants": {
-   "NEW": 0,
-   "NEGOTIATING": 1,
-   "ACTIVE": 2,
-   "CLOSING": 4,
-   "CLOSED": 3,
-   "ICE_GATHERING": 256,
-   "ICE_WAITING": 512,
-   "ICE_CHECKING": 768,
-   "ICE_CONNECTED": 1024,
-   "ICE_COMPLETED": 1280,
-   "ICE_FAILED": 1536,
-   "ICE_CLOSED": 1792,
-   "SDP_IDLE": 4096,
-   "SDP_WAITING": 8192,
-   "SDP_GLARE": 12288
-  },
-  "readonly": {
-   "readyState": "Uint16",
-   "iceState": "Uint16",
-   "sdpState": "Uint16",
-   "localStreams": "MediaStream...",
-   "remoteStreams": "MediaStream..."
-  },
-  "properties": {
-   "onconnecting": "Function",
-   "onopen": "Function",
-   "onstatechange": "Function",
-   "onaddstream": "Function",
-   "onremovestream": "Function"
-  },
-  "construct": {
-   "args": {
-    "configuration": "String",
-    "signalingCallback": "SignalingCallback"
-   }
-  }
- },
- "SignalingCallback": {
-  "type": "interface",
-  "inherits": [],
-  "methods": {
-   "handleEvent": {
-    "args": {
-     "message": "String",
-     "source": "PeerConnection"
-    }
-   }
-  },
-  "Callback": true,
-  "NoInterfaceObject": true
- }
+  "URL": {
+    "inherits": [],
+    "methods": {
+      "createObjectURL": { "returns": "String", "args": { "stream": "MediaStream" } } 
+    } 
+  } 
 }

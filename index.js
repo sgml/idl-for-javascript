@@ -10,3 +10,20 @@ Object.keys(sources).forEach(function(name){
     return json;
   };
 });
+
+
+exports.tags = function tags(){
+  var tagmap = require('./json/_tags'),
+      interfaces = { HTML: exports.html5(), SVG: exports.svg() },
+      out = {};
+
+  for (var k in tagmap) {
+    out[k] = {};
+    for (var j in tagmap[k]) {
+      var name = k+tagmap[k][j]+'Element';
+      out[k][j] = interfaces[k][name];
+    }
+  }
+
+  return out;
+};

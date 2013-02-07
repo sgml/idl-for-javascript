@@ -1,0 +1,30 @@
+enum FutureState {
+  "pending",
+  "accepted",
+  "rejected"
+};
+
+interface ResolverCallbacks {
+  void accept(optional any value);
+  void reject(optional any error);
+  void cancel()                  ;
+  void timeout()                 ;
+};
+
+callback InitCallback = void (ResolverCallbacks callbacks);
+
+[Constructor(InitCallback init)]
+interface Future : EventTarget {
+
+  readonly attribute any         value;
+  readonly attribute any         error;
+  readonly attribute boolean     rejected;
+  readonly attribute FutureState state;
+
+  Future  then(optional EventHandler onaccept,
+               optional EventHandler onreject);
+
+
+  void    done(optional EventHandler onaccept,
+               optional EventHandler onreject);
+};

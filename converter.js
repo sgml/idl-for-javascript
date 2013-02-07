@@ -1,9 +1,9 @@
-var fs = require('fs');
-var path = require('path');
-var parseIDL = require('webidl.js').webidl;
-var tags = require('./json/_tags');
-var zlib = require('zlib');
-
+var fs        = require('fs'),
+    path      = require('path'),
+    parseIDL  = require('webidl2.js'),
+    tags      = require('./tags'),
+    zlib      = require('zlib'),
+    stringify = require('./stringify');
 
 
 function recase(s){
@@ -52,20 +52,6 @@ function sort(o){
   return out;
 }
 
-Object.keys(tags).forEach(function(type){
-  var tagset = tags[type],
-      name = [type, , 'Element'];
-
-  name.toString = function(){ return this.join('') };
-  delete tags[type];
-
-  Object.keys(tagset).forEach(function(tag){
-    name[1] = tagset[tag] || recase(tag);
-    tags[name] = tag;
-  });
-});
-
-
 
 
 var allDefinitions = {},
@@ -110,6 +96,10 @@ function interpretType(json){
   if (json.idlType === 'union')
     return json.members.map(interpretType);
 
+  if (json instanceof Array) {
+    return json.map(interpretType);
+  }
+
   var name = isObject(json.idlType) ? interpretType(json.idlType) : json.idlType;
 
   if (name in typeMap)
@@ -121,6 +111,9 @@ function interpretType(json){
   if (json.array)
     name = name+'...';
 
+  if (!name) {
+    console.log(json);
+  }
   return name;
 }
 
@@ -142,6 +135,9 @@ var definitionTypes = {
     return new Callback(json);
   },
   callbackinterface: function(json){
+    return new CallbackInterface(json);
+  },
+  'callback interface': function(json){
     return new CallbackInterface(json);
   },
   partialinterface: function(json){
@@ -218,8 +214,12 @@ function Interface(json){
 
     var type = memberTypes[member.type].name,
         set = this[type] = this[type] || Object.create(null),
-        item = memberTypes[member.type](member),
-        itemArgs = item.args;
+        item = memberTypes[member.type](member);
+    if (!item) {
+      return console.log(member)
+    }
+
+    var itemArgs = item.args;
 
     if (member.name in set && type === 'methods') {
       var existing = set[member.name],
@@ -498,7 +498,7 @@ var conversionStanza = [
 ];
 
 function saveJSON(folder, name, json){
-  fs.writeFileSync(path.resolve(folder, name), JSON.stringify(sort(json), null, ' '));
+  fs.writeFileSync(path.resolve(folder, name), stringify(sort(json), null, '  '));
 }
 
 function stanzaRunner(ops, input, state){
@@ -518,7 +518,7 @@ function convert(file, outdir){
   }
 }
 
-fs.readdirSync('./idl').forEach(function(name){
+['DOMFuture.idl'].forEach(function(name){
   convert('./idl/'+name, './json');
 });
 

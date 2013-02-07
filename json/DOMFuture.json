@@ -1,0 +1,60 @@
+{
+  "Future": {
+    "inherits": [ "EventTarget" ],
+    "readonly": {
+      "value": "Any",
+      "error": "Any",
+      "rejected": "Boolean",
+      "state": "FutureState"
+    },
+    "methods": {
+      "then": {
+        "returns": "Future",
+        "args": {
+          "onaccept": "EventHandler",
+          "onreject": "EventHandler"
+        },
+        "raises": "Error"
+      },
+      "done": {
+        "args": {
+          "onaccept": "EventHandler",
+          "onreject": "EventHandler"
+        },
+        "raises": "Error"
+      }
+    },
+    "construct": {
+      "args": {
+        "init": "InitCallback"
+      }
+    }
+  },
+  "FutureState": {
+    "type": "enum",
+    "values": [ "pending", "accepted", "rejected" ]
+  },
+  "InitCallback": {
+    "type": "callback",
+    "args": {
+      "callbacks": "ResolverCallbacks"
+    }
+  },
+  "ResolverCallbacks": {
+    "inherits": [],
+    "methods": {
+      "accept": {
+        "args": {
+          "value": "Any"
+        }
+      },
+      "reject": {
+        "args": {
+          "error": "Any"
+        }
+      },
+      "cancel": {},
+      "timeout": {}
+    }
+  }
+}

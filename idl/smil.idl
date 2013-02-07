@@ -77,7 +77,7 @@
   };
 
   interface TimeList {
-    Time               item(in unsigned long index);
+    Time               item(unsigned long index);
     readonly attribute unsigned long    length;
   };
 
@@ -168,11 +168,11 @@
   interface ElementTimeControl {
     boolean            beginElement();
                                         //raises(dom::DOMException);
-    boolean            beginElementAt(in float offset);
+    boolean            beginElementAt(float offset);
                                         //raises(dom::DOMException);
     boolean            endElement();
                                         //raises(dom::DOMException);
-    boolean            endElementAt(in float offset);
+    boolean            endElementAt(float offset);
                                         //raises(dom::DOMException);
   };
 
@@ -240,12 +240,11 @@
   };
 
   interface TimeEvent : Event {
-  //interface TimeEvent : events::Event {
-    readonly attribute views::AbstractView  view;
+    readonly attribute AbstractView  view;
     readonly attribute long             detail;
-    void               initTimeEvent(in DOMString typeArg, 
-                                     in views::AbstractView viewArg, 
-                                     in long detailArg);
+    void               initTimeEvent(DOMString typeArg,
+                                     AbstractView viewArg,
+                                     long detailArg);
   };
 
   interface SMILMediaElement : ElementTime, SMILElement {
